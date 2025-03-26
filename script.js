@@ -1,23 +1,30 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // Function to get the value of a cookie by name
-  function getCookie(name) {
-    let cookieArray = document.cookie.split('; ');
-    let cookie = cookieArray.find((row) => row.startsWith(name + '='));
-    return cookie ? cookie.split('=')[1] : null;
-  }
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Count Tracker</title>
+</head>
+<body>
+    <h1>Cookie-Based Count Tracker</h1>
+    <p>Page Load Count: <span id="count">0</span></p>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function getCookie(name) {
+                let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                return match ? match[2] : null;
+            }
 
-  // Function to set a cookie
-  function setCookie(name, value, daysToExpire) {
-    let date = new Date();
-    date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000);
-    document.cookie =
-      name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
-  }
+            function setCookie(name, value, days) {
+                let date = new Date();
+                date.setTime(date.getTime() + days * 86400000);
+                document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+            }
 
-  // 1. Get the value of the 'count' cookie
-  // 2. If the cookie exists, increment the value and update the cookie
-  // 3. If the cookie does not exist, create it and set the value to 1
-  // 4. Display the count on the webpage
-
-  // your code here
-});
+            let count = parseInt(getCookie("pageCount") || 0) + 1;
+            setCookie("pageCount", count, 7);
+            document.getElementById("count").textContent = count;
+        });
+    </script>
+</body>
+</html>
